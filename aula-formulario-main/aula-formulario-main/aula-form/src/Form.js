@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 export function Form() {
 
@@ -9,27 +9,27 @@ export function Form() {
         handleSubmit,
         formState: { errors },
         reset } = useForm({ mode: 'onBlur' });
-      //Arrow Function
-      const onSubmit = async (data) => {
-     
+    //Arrow Function
+    const onSubmit = async (data) => {
+
         try {
             const response = await fetch('http://localhost:8080/api/v1/usuario',
                 {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json' 
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data),                
+                    body: JSON.stringify(data),
                 }
             );
             if (response.ok) {
                 const mensagemSucesso = await response.text();
-                setMensagem({mensagemSucesso})
+                setMensagem({ mensagemSucesso })
                 console.log("Resposta do backend", mensagemSucesso);
                 reset()
             } else {
                 const mensagemFalhou = await response.text();
-                setMensagem({mensagemFalhou})
+                setMensagem({ mensagemFalhou })
                 console.error('Erro ao cadastrar.');
                 console.log(response)
                 console.log(data)
@@ -37,14 +37,14 @@ export function Form() {
         } catch (error) {
             console.error('Erro ao buscar a mensagem:', error);
             setMensagem('Erro ao buscar a mensagem no servidor.');
-    
-      }
+
+        }
     }
 
     return (
         <div>
-            <h1 className='text-3xl text-900 mb-4'>CADASTRO</h1>
-            <form className='space-y-2'onSubmit={handleSubmit(onSubmit)} noValidate>
+            <h1 className='text-3xl text-900 mb-4'>CADASTRO DE USUARIO</h1>
+            <form className='space-y-2' onSubmit={handleSubmit(onSubmit)} noValidate>
                 <label className='block text-sm font-medium text-gray-700'>Nome </label>
                 <input
                     placeholder='Digite seu nome'
@@ -68,7 +68,7 @@ export function Form() {
                     {...register("senha", { required: "A senha é obrigatória", minLength: { value: 6, message: "A senha deve ter no mínimo 6 caracteres" } })}
                     className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 /><br />
-                
+
 
                 {errors.senha && <p style={{ color: "red" }}>{errors.senha.message}</p>}
                 <label className='block text-sm font-medium text-gray-700'>Telefone </label>
@@ -86,34 +86,34 @@ export function Form() {
 
                 {errors.dataNascimento && <p style={{ color: "red" }}>{errors.dataNascimento.message}</p>}
                 <label className='block text-sm font-medium text-gray-700'>cpf </label>
-                <input type="text" name="cpf"  pattern="(\d{3}\.?\d{3}\.?\d{3}-?\d{2})|(\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2})" 
+                <input type="text" name="cpf" pattern="(\d{3}\.?\d{3}\.?\d{3}-?\d{2})|(\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2})"
                     {...register("cpf", { required: "O cpf é obrigatório" })}
                     className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                /><br/>
+                /><br />
 
                 {errors.cpf && <p style={{ color: "red" }}>{errors.cpf.message}</p>}
                 <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Tipo de Usuário</label>
-                <select 
-                name="tipo"
-                {...register("tipo", { 
-                required: "O tipo de usuário é obrigatório"
-                })}
-                className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
-                >
-                <option value="">Selecione um tipo</option>
-                <option value="ADMINISTRADOR">Administrador</option>
-                <option value="CLIENTE">Usuário</option>
-                <option value="ORGANIZADOR">Moderador</option>
-                </select>
+                    <label className="block text-sm font-medium text-gray-700">Tipo de Usuário</label>
+                    <select
+                        name="tipo"
+                        {...register("tipo", {
+                            required: "O tipo de usuário é obrigatório"
+                        })}
+                        className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                    >
+                        <option value="">Selecione um tipo</option>
+                        <option value="ADMINISTRADOR">Administrador</option>
+                        <option value="CLIENTE">Usuário</option>
+                        <option value="ORGANIZADOR">Moderador</option>
+                    </select>
                     {errors.tipo && <p className="text-red-500 text-sm mt-1">{errors.tipo.message}</p>}
-                    </div>
+                </div>
 
-                
+
                 <div className='flex justify-center'>
-                <button className="w-1/2 mt-2 p-3 text-white rounded-lg bg-sky-500 hover:bg-sky-700" type='submit'>Enviar</button>
+                    <button className="w-1/2 mt-2 p-3 text-white rounded-lg bg-sky-500 hover:bg-sky-700" type='submit'>Enviar</button>
                 </div>
             </form>
-        </div> 
-            );
+        </div>
+    );
 }
