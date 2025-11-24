@@ -3,7 +3,7 @@ import React, {useState} from "react";
 
 export function Form() {
 
-    const [mensagem, setMensagem] = useState("http://localhost:8080/api/v1/usuario");
+    const [mensagem, setMensagem] = useState("");
 
     const { register,
         handleSubmit,
@@ -13,7 +13,7 @@ export function Form() {
       const onSubmit = async (data) => {
      
         try {
-            const response = await fetch('',
+            const response = await fetch('http://localhost:8080/api/v1/usuario',
                 {
                     method: 'POST',
                     headers: {
@@ -31,6 +31,8 @@ export function Form() {
                 const mensagemFalhou = await response.text();
                 setMensagem({mensagemFalhou})
                 console.error('Erro ao cadastrar.');
+                console.log(response)
+                console.log(data)
             }
         } catch (error) {
             console.error('Erro ao buscar a mensagem:', error);
@@ -41,7 +43,7 @@ export function Form() {
 
     return (
         <div>
-            <h1 className='text-3xl text-900 mb-4'>Criando Formulários</h1>
+            <h1 className='text-3xl text-900 mb-4'>CADASTRO</h1>
             <form className='space-y-2'onSubmit={handleSubmit(onSubmit)} noValidate>
                 <label className='block text-sm font-medium text-gray-700'>Nome </label>
                 <input
@@ -84,13 +86,30 @@ export function Form() {
 
                 {errors.dataNascimento && <p style={{ color: "red" }}>{errors.dataNascimento.message}</p>}
                 <label className='block text-sm font-medium text-gray-700'>cpf </label>
-                <input type="text" name="cpf"  pattern="(\d{3}\.?\d{3}\.?\d{3}-?\d{2})|(\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2})" //criar uma máscara, ajustar o placeholder
+                <input type="text" name="cpf"  pattern="(\d{3}\.?\d{3}\.?\d{3}-?\d{2})|(\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2})" 
                     {...register("cpf", { required: "O cpf é obrigatório" })}
                     className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 /><br/>
 
-
                 {errors.cpf && <p style={{ color: "red" }}>{errors.cpf.message}</p>}
+                <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700">Tipo de Usuário</label>
+                <select 
+                name="tipo"
+                {...register("tipo", { 
+                required: "O tipo de usuário é obrigatório"
+                })}
+                className="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                >
+                <option value="">Selecione um tipo</option>
+                <option value="ADMINISTRADOR">Administrador</option>
+                <option value="CLIENTE">Usuário</option>
+                <option value="ORGANIZADOR">Moderador</option>
+                </select>
+                    {errors.tipo && <p className="text-red-500 text-sm mt-1">{errors.tipo.message}</p>}
+                    </div>
+
+                
                 <div className='flex justify-center'>
                 <button className="w-1/2 mt-2 p-3 text-white rounded-lg bg-sky-500 hover:bg-sky-700" type='submit'>Enviar</button>
                 </div>
